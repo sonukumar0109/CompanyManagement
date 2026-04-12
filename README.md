@@ -1,4 +1,4 @@
-# 🚀 Spring Boot Microservices Project
+# 🚀 Company Management Project
 
 A scalable microservices-based backend built using **Spring Boot** and **REST APIs**, featuring service discovery, centralized configuration, and modular architecture.
 
