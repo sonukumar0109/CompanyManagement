@@ -21,8 +21,8 @@ public class ReviewController {
         return new ResponseEntity<>(reviewService.getAllReviews(companyId),HttpStatus.OK);
     }
 
-    @PostMapping("/create")
-    public  ResponseEntity<String>createReviewForCompany(@RequestParam Long companyId,@RequestBody Reviews reviews){
+    @PostMapping("/create/{companyId}")
+    public  ResponseEntity<String>createReviewForCompany(@PathVariable Long companyId,@RequestBody Reviews reviews){
         reviewService.createReviewForCompany(companyId,reviews);
         return new ResponseEntity<>( "data saved successfully",HttpStatus.OK);
     }
