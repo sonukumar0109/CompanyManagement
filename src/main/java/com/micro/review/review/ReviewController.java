@@ -1,5 +1,6 @@
 package com.micro.review.review;
 
+import com.micro.review.messeging.ReviewMessageProducer;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,8 +13,11 @@ public class ReviewController {
 
     private ReviewService reviewService;
 
-    public ReviewController(ReviewService reviewService) {
+    private ReviewMessageProducer reviewMessageProducer;
+
+    public ReviewController(ReviewService reviewService, ReviewMessageProducer reviewMessageProducer) {
         this.reviewService = reviewService;
+        this.reviewMessageProducer = reviewMessageProducer;
     }
 
     @GetMapping()
@@ -24,6 +28,7 @@ public class ReviewController {
     @PostMapping("/create/{companyId}")
     public  ResponseEntity<String>createReviewForCompany(@PathVariable Long companyId,@RequestBody Reviews reviews){
         reviewService.createReviewForCompany(companyId,reviews);
+        reviewMessageProducer.sendMessage(reviews);
         return new ResponseEntity<>( "data saved successfully",HttpStatus.OK);
     }
 
@@ -43,5 +48,13 @@ public class ReviewController {
         reviewService.updateReviewByReviewId(reviewId,reviews);
         return new ResponseEntity<>("Review updated successfully",HttpStatus.OK);
     }
+
+
+    @GetMapping("/avarageRating")
+    public String getAvgRating(@RequestParam Long companyId){
+        List<Reviews>reviewsList = reviewService.getAllReviews(companyId);
+        return reviewsList.get(0).getGrade();
+    }
+
 
 }
